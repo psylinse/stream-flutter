@@ -170,7 +170,7 @@ class MainActivity : FlutterActivity() {
 
     eventChannel.setStreamHandler(object : EventChannel.StreamHandler {
       override fun onListen(listener: Any, eventSink: EventChannel.EventSink) {
-        channel.query(ChannelQueryRequest().withMessages(25).withWatch(), object : QueryChannelCallback {
+        channel.watch(ChannelWatchRequest().withMessages(25), object : QueryWatchCallback {
           override fun onSuccess(response: ChannelState) {
             eventSink.success(ObjectMapper().writeValueAsString(response.messages))
           }
