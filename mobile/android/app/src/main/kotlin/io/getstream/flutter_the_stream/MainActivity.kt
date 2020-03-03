@@ -165,12 +165,12 @@ class MainActivity : FlutterActivity() {
     val channelId = listOf(user, userToChatWith).sorted().joinToString("-")
     var subId: Int? = null
     val client = StreamChat.getInstance(application)
-    val channel = client.channel(ModelType.channel_messaging, channelId, hashMapOf<String, Any>("members" to listOf(user, userToChatWith)))
+    val channel = client.channel(ModelType.channel_messaging, hashMapOf<String, Any>(), listOf(user, userToChatWith))
     val eventChannel = EventChannel(flutterView, "io.getstream/events/${channelId}")
 
     eventChannel.setStreamHandler(object : EventChannel.StreamHandler {
       override fun onListen(listener: Any, eventSink: EventChannel.EventSink) {
-        channel.query(ChannelQueryRequest().withMessages(25).withWatch(), object : QueryChannelCallback {
+        channel.watch(ChannelWatchRequest().withMessages(25), object : QueryWatchCallback {
           override fun onSuccess(response: ChannelState) {
             eventSink.success(ObjectMapper().writeValueAsString(response.messages))
           }
